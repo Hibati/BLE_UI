@@ -1,4 +1,7 @@
 class DevicesController < ApplicationController
+  
+  @@usekey  = 'YG0DPTL0P8EWPQJ1'
+  @@thingspeak = 'https://localhost:3000'
   def index
     @chlist  = getChannelListjson
     
@@ -11,13 +14,13 @@ class DevicesController < ApplicationController
    
     
     
-      url = "http://iotser.iots.com.tw:3000/channels/#{params[:id]}"
+      url =   @@thingspeak + "/channels/#{params[:id]}"
       uri = URI(url)
       http = Net::HTTP.new(uri.host, 3000)
       #http.use_ssl = true
       req = Net::HTTP::Put.new(uri.path)
       puts params[:api_key] + "fghfghfghfghgfh"
-      req.set_form_data({'api_key'=> '8L8ETZK2BHK6G5UI','metadata' => create_metadata_json("running",params[:api_key]) })
+      req.set_form_data({'api_key'=> @@usekey,'metadata' => create_metadata_json("running",params[:api_key]) })
       res = http.request(req)
       puts res
     redirect_to action: 'index'
@@ -25,12 +28,12 @@ class DevicesController < ApplicationController
   def stop
   
   
-      url = "http://iotser.iots.com.tw:3000/channels/#{params[:id]}"
+      url = @@thingspeak + "/channels/#{params[:id]}"
       uri = URI(url)
       http = Net::HTTP.new(uri.host, 3000)
       #http.use_ssl = true
       req = Net::HTTP::Put.new(uri.path)
-      req.set_form_data({'api_key'=> '8L8ETZK2BHK6G5UI','metadata' => create_metadata_json("stop",params[:api_key]) })
+      req.set_form_data({'api_key'=> @@usekey,'metadata' => create_metadata_json("stop",params[:api_key]) })
       http.request(req)
       redirect_to action: 'index'
   
@@ -47,12 +50,12 @@ class DevicesController < ApplicationController
     my_hash = {:device_type => params[:device]  ,:mac => params[:mac] , :status => "stop" , :api_key =>ch['api_key'] }
     
     
-    url = "http://iotser.iots.com.tw:3000/channels/#{ch['id']}"
+    url = @@thingspeak + "/channels/#{ch['id']}"
     uri = URI(url)
     http = Net::HTTP.new(uri.host, 3000)
     #http.use_ssl = true
     req = Net::HTTP::Put.new(uri.path)
-    req.set_form_data({'api_key'=> '8L8ETZK2BHK6G5UI','metadata' =>  JSON.generate(my_hash)  })
+    req.set_form_data({'api_key'=> @@usekey,'metadata' =>  JSON.generate(my_hash)  })
     res = http.request(req)
     puts res
  
@@ -76,8 +79,8 @@ class DevicesController < ApplicationController
 private
   
     def getChannelListjson()
-        uri = URI('http://iotser.iots.com.tw:3000/channels.json')
-        params = { 'api_key' => '8L8ETZK2BHK6G5UI'}
+        uri = URI(@@thingspeak + '/channels.json')
+        params = { 'api_key' => @@usekey}
         uri.query = URI.encode_www_form(params)
         res = Net::HTTP.get_response(uri)
         return res.body
@@ -89,8 +92,8 @@ private
      
       if params[:mac].length >1
          
-      uri = URI('http://iotser.iots.com.tw:3000/channels')
-      res = Net::HTTP.post_form(uri, 'api_key' => '8L8ETZK2BHK6G5UI', 'name' => params[:device],
+      uri = URI(@@thingspeak + '/channels')
+      res = Net::HTTP.post_form(uri, 'api_key' => @@usekey, 'name' => params[:device],
       'description' => params[:description], 'field1' => params[:device],'field2' =>'field2','field3' =>'field3' ,'field8' => "field8", 'public_flag' =>'true',
       'metadata' => create_metadata_json("stop","null") )
       str  = JSON.parse( res.body)
@@ -108,12 +111,12 @@ private
     
     def delete_a_channel(cid)
   
-      url = 'http://iotser.iots.com.tw:3000/channels/'+ cid.to_s
+      url = @@thingspeak + '/channels/'+ cid.to_s
       uri = URI(url)
       http = Net::HTTP.new(uri.host, 3000)
       #http.use_ssl = true
       req = Net::HTTP::Delete.new(uri.path)
-      req.set_form_data({'api_key'=> '8L8ETZK2BHK6G5UI'})
+      req.set_form_data({'api_key'=> @@usekey})
       res = http.request(req)
       puts "deleted #{res}"
     end
