@@ -33,7 +33,7 @@
              <%= button_to "刪除", {  :controller => "devices" , :action => "delete" ,:id => t['id'] ,:api_key => m['api_key'] ,:device =>t['name']},:method => "get", :class=>"btn btn-primary btn-lg"  %>
             </td>
             <%else%>
-            <td> <%= button_to "解除裝置連線", {  :controller => "devices" , :action => "stop" ,:id => t['id'] ,:mac => m['mac'] ,:api_key => m['api_key'] },:method => "post", :class=>"btn btn-primary btn-lg"  %>
+            <td> <%= button_to "解除裝置連線", {  :controller => "devices" , :action => "stop" ,:id => t['id'] ,:mac => m['mac'] ,:api_key => m['api_key'] , :device => t['name'] },:method => "post", :class=>"btn btn-primary btn-lg"  %>
              <%= button_to "刪除", {  :controller => "devices" , :action => "delete" ,:id => t['id'],:api_key => m['api_key'] },:method => "get", :class=>"btn btn-primary btn-lg"  %>
             </td>
             <%end%>
