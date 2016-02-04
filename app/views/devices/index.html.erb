@@ -1,0 +1,58 @@
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+<table class="table table-bordered">
+<tr>
+  <th>Channel ID</th>
+  <th>Device Name</th>
+  <th>MAC Address</th>
+  <th>Description</th>
+  <th>Last Update</th>
+  <th>Action</th>
+  
+</tr>
+<% str  = JSON.parse(@chlist)%>
+
+<%str.each do |t|%>
+    <tr>
+            <td><%=t['id']%></td>
+            <td><%=t['name']%></td>
+            <% m  = JSON.parse(t['metadata'])%>
+            <td><%=m['mac']%></td>
+            <td><%=t['description']%></td>
+            <td><%=t['created_at']%></td>
+            <%if m['status']=="stop"%>
+            <td> <%= button_to "連接裝置", {  :controller => "devices" , :action => "run" , :id => t['id'] , :mac => m['mac'] , :device => t['name'] , :api_key => m['api_key'] },:method => "post", :class=>"btn btn-primary btn-lg"  %>
+             <%= button_to "刪除", {  :controller => "devices" , :action => "delete" ,:id => t['id'] ,:api_key => m['api_key'] ,:device =>t['name']},:method => "get", :class=>"btn btn-primary btn-lg"  %>
+            </td>
+            <%else%>
+            <td> <%= button_to "解除裝置連線", {  :controller => "devices" , :action => "stop" ,:id => t['id'] ,:mac => m['mac'] ,:api_key => m['api_key'] },:method => "post", :class=>"btn btn-primary btn-lg"  %>
+             <%= button_to "刪除", {  :controller => "devices" , :action => "delete" ,:id => t['id'],:api_key => m['api_key'] },:method => "get", :class=>"btn btn-primary btn-lg"  %>
+            </td>
+            <%end%>
+    </tr>
+<%end%>
+</table>
+
+
+
+
+<%= form_tag controller: "devices", action: "new", method: "get", class: "nifty_form dropdown" do %>
+  <%= label_tag :device_type, "Device Type:" %>
+  <%= select_tag :device_type ,"<option>Actuator</option><option>Sensor</option>".html_safe, :id => 'device_type' %>
+  <%= label_tag :device, "Device:" %>
+  <%= select_tag :device , :id => 'device'%>
+  <%= label_tag :description, "Description:" %>
+  <%= text_field_tag :description, params[:description] %>
+  <%= label_tag :mac, "Mac Address:" %>
+  <%= text_field_tag :mac, params[:mac] %>
+    
+  <%= submit_tag "Create The Device", class: "btn btn-primary btn-lg" %>
+<% end %>
