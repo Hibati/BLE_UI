@@ -1,7 +1,7 @@
 class DevicesController < ApplicationController
   
   @@usekey  = 'YG0DPTL0P8EWPQJ1'
-  @@thingspeak = 'http://192.168.1.25:3000'
+  @@thingspeak = 'http://localhost:3000'
   def index
     @chlist  = getChannelListjson
     

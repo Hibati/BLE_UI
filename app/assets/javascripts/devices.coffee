@@ -2,7 +2,7 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 create_option_for_Sensor = ->
-    sensor = ["SW Sensor" ,"Temperature Sensor" ,"Luminosity Sensor" ,"Sound Sensor" , "Gas Sensor", "Switch Sensor", "Pressure Sensor"]
+    sensor = ["SW Sensor" ,"Temperature Sensor" , "PM Sensor" ,"Luminosity Sensor" ,"Sound Sensor" , "Gas Sensor", "Switch Sensor", "Pressure Sensor"]
     for i in [0...sensor.length]
         $('#device').append( $("<option></option>").attr("value",sensor[i]).text(sensor[i]))
 delete_all_options =  ->
