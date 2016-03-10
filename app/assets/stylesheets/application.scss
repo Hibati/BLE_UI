@@ -10,6 +10,13 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
- *= require_tree .
- *= require_self
+ *
+ *= require ./bootstrap.min.css
+ *= require ./devices.scss
  */
+body{
+    padding-top: 30px;
+    padding-right: 12px;
+    padding-left: 12px;
+    padding-bottom: 20px;
+}
